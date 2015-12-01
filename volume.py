@@ -19,13 +19,13 @@ def main():
     screen.border(0)
     screen.addstr("System Volume Control")
     dimensions = screen.getmaxyx()
-
+    
     # Main Input Loop
     user_input = None
-    while user_input != escape_character:
+    while user_input != chr(escape_character):
         draw_bars()
-        user_input = screen.getch()
-
+        user_input = chr(screen.getch())
+        
     # Break out of main loop, end program
     curses.endwin()
 
