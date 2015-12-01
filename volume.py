@@ -10,13 +10,21 @@ dimensions = None;
 def main():
     global screen
     global dimensions
+    # Disable output to terminal
     screen = curses.initscr()
+    curses.noecho()
     screen.immedok(True)
     screen.border(0)
     screen.addstr("System Volume Control")
     dimensions = screen.getmaxyx()
-    draw_bars()
-    screen.getch()
+
+    # Main Input Loop
+    user_input = None
+    while user_input != 7:
+        draw_bars()
+        screen.getch()
+
+    # Break out of main loop, end program
     curses.endwin()
 
 def draw_bars():
@@ -28,3 +36,12 @@ def draw_bars():
 
 if __name__ == "__main__":
     main()
+
+
+# from subprocess import call
+# call(["ls", "-l"])
+
+# osascript -e "set Volume 0"
+
+# osascript -e 'set ovol to output volume of (get volume settings)'
+
