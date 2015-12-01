@@ -5,6 +5,8 @@ import curses
 # Global Variables
 screen = None;
 dimensions = None;
+# Getch escape representation
+escape_character = 27
 
 # Main Input Loop
 def main():
@@ -20,9 +22,9 @@ def main():
 
     # Main Input Loop
     user_input = None
-    while user_input != 7:
+    while user_input != escape_character:
         draw_bars()
-        screen.getch()
+        user_input = screen.getch()
 
     # Break out of main loop, end program
     curses.endwin()
@@ -32,7 +34,7 @@ def draw_bars():
     box1.immedok(True)
     
     box1.box()    
-    box1.addstr("System Volume")
+    box1.addstr("Bar")
 
 if __name__ == "__main__":
     main()
