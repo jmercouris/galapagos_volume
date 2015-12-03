@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # Imports
 import curses 
+import curses.ascii
 
 # Global Variables
 screen = None;
@@ -19,13 +20,15 @@ def main():
     screen.border(0)
     screen.addstr("System Volume Control")
     dimensions = screen.getmaxyx()
-    
+
+
     # Main Input Loop
-    user_input = None
-    while user_input != chr(escape_character):
-        draw_bars()
-        user_input = chr(screen.getch())
-        
+    user_input = ''
+    # Break if user enters 'esc' or 'q'
+    while ((user_input != escape_character) and (user_input != ord('q'))):
+        user_input = screen.getch()
+        screen.refresh()
+    
     # Break out of main loop, end program
     curses.endwin()
 
