@@ -16,6 +16,7 @@ def main():
     # Disable output to terminal
     screen = curses.initscr()
     curses.noecho()
+    screen.keypad(True)
     screen.immedok(True)
     screen.border(0)
     screen.addstr("System Volume Control")
@@ -30,6 +31,9 @@ def main():
         screen.refresh()
     
     # Break out of main loop, end program
+    curses.nocbreak()
+    screen.keypad(False)
+    curses.echo()
     curses.endwin()
 
 def draw_bars():
