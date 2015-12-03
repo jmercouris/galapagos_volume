@@ -22,12 +22,15 @@ def main():
     screen.addstr("System Volume Control")
     dimensions = screen.getmaxyx()
 
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_WHITE)
 
     # Main Input Loop
     user_input = ''
     # Break if user enters 'esc' or 'q'
     while ((user_input != escape_character) and (user_input != ord('q'))):
         user_input = screen.getch()
+        draw_bars()
         screen.refresh()
     
     # Break out of main loop, end program
@@ -37,11 +40,12 @@ def main():
     curses.endwin()
 
 def draw_bars():
-    box1 = curses.newwin(dimensions[0]-10, dimensions[1]-10, 10, 10)
-    box1.immedok(True)
-    
-    box1.box()    
-    box1.addstr("Bar")
+    box = curses.newwin(dimensions[0]-10, dimensions[1]-10, 10, 10)
+    box.bkgd(' ', curses.color_pair(1))
+    box.immedok(True)
+    box.box()
+    box.addstr("Bar")
+
 
 if __name__ == "__main__":
     main()
