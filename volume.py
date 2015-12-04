@@ -29,14 +29,14 @@ class VolumeModel:
     """
     def __init__(self):
         # List of audio devices
-        audio_devices = []
+        audio_devices = self.audio_devices = []
         
         # AudioDevice Output
         get_volume_command = ['osascript', '-e', 'output volume of (get volume settings)']
         set_volume_command = ['osascript', '-e', 'set volume output volume {}']
         device = AudioDevice("Output", set_volume_command, get_volume_command)
         audio_devices.append(device)
-        device.set_volume(70)
+        device.set_volume(60)
         
         # AudioDevice Input
         get_volume_command = ['osascript', '-e', 'input volume of (get volume settings)']
@@ -44,8 +44,8 @@ class VolumeModel:
         device = AudioDevice("Input", set_volume_command, get_volume_command)
         audio_devices.append(device)
         
-    def get_devices(self):
-        return audio_devices
+    def get_audio_devices(self):
+        return self.audio_devices
 
 class VolumeView(urwid.WidgetWrap):
     """
@@ -74,6 +74,7 @@ class VolumeView(urwid.WidgetWrap):
 
     def __init__(self, controller):
         self.controller = controller
+        self.audio_devices = self.controller.get_audio_devices()
         urwid.WidgetWrap.__init__(self, self.main_window())
         
     def bar_graph(self, smooth=False):
@@ -82,15 +83,15 @@ class VolumeView(urwid.WidgetWrap):
             satt = {(1,0): 'bg 1 smooth', (2,0): 'bg 2 smooth'}
         w = urwid.BarGraph(['bg background','bg 1','bg 2'], satt=satt)
         return w
-
+        
     def button(self, t, fn):
         w = urwid.Button(t, fn)
         w = urwid.AttrWrap(w, 'button normal', 'button select')
         return w
-
+        
     def exit_program(self, w):
         raise urwid.ExitMainLoop()
-
+        
     def update_graph(self, force_update=False):
         l = []
         for n in range(10):
@@ -101,14 +102,14 @@ class VolumeView(urwid.WidgetWrap):
             else:
                 l.append([value,0])
         self.graph.set_data(l,10)
-
+        
     def graph_controls(self):
-        l = [urwid.Text("Mode",align="center"),
-            ] + [
+        l = [
             urwid.Divider(),
-            urwid.Text("Animation",align="center"),
+            urwid.Text("Device",align="center"),
             urwid.Divider(),
-            self.button("Quit", self.exit_program ),
+            self.button("Input", self.exit_program ),
+            self.button("Output", self.exit_program ),
             self.button("Quit", self.exit_program ),
             ]
         w = urwid.ListBox(urwid.SimpleListWalker(l))
@@ -124,9 +125,6 @@ class VolumeView(urwid.WidgetWrap):
             dividechars=1, focus_column=2)
         w = urwid.Padding(w,('fixed left',1),('fixed right',0))
         return w
-        
-    def main(self):
-        pass
 
 class VolumeController:
     """
@@ -135,9 +133,12 @@ class VolumeController:
     """
     def __init__(self):
         self.model = VolumeModel()
-        self.view = VolumeView( self )
+        self.view = VolumeView(self)
         self.view.update_graph(True)
         
+    def get_audio_devices(self):
+        return self.model.get_audio_devices()
+
     def main(self):
         self.loop = urwid.MainLoop(self.view, self.view.palette)
         self.loop.run()
