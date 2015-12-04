@@ -77,11 +77,6 @@ class VolumeView(urwid.WidgetWrap):
     # Exit Program
     def exit_program(self, w):
         raise urwid.ExitMainLoop()
-    # Change Volume
-    def delta_volume(self, device, amount):
-        current_volume = device.get_volume()
-        device.set_volume(10)
-        self.update_graph(True)
     # Update Graph View
     def update_graph(self, force_update=False):
         l = []
@@ -100,8 +95,8 @@ class VolumeView(urwid.WidgetWrap):
             urwid.Divider(),]
         
         for device in self.audio_devices:
-            l.append(self.button("{}  Volume:+".format(device.name), self.delta_volume(device, 5)))
-            l.append(self.button("{}  Volume:-".format(device.name), self.delta_volume(device, -5)))
+            l.append(self.button("{}  Volume:+".format(device.name), self.exit_program))
+            l.append(self.button("{}  Volume:-".format(device.name), self.exit_program))
             l.append(urwid.Divider())
             
         l.append(self.button("Quit", self.exit_program ))
