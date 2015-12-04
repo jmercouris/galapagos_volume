@@ -2,6 +2,8 @@
 # Imports
 import curses 
 import curses.ascii
+import os
+import subprocess
 
 # Global Variables
 screen = None;
@@ -21,9 +23,12 @@ def main():
     screen.border(0)
     screen.addstr("System Volume Control")
     dimensions = screen.getmaxyx()
-
     curses.start_color()
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    # AudioDevice List Initialization
+    audio_devices = []
+    device = AudioDevice("osascript -e 'set volume output volume 50' &> /dev/null")
+    audio_devices.append(device)
 
     # Main Input Loop
     user_input = ''
@@ -54,14 +59,18 @@ def draw_bar():
     box.box()
     box.addstr("Bar")
 
+class AudioDevice:
+    def __init__(self, system_command):
+        self.system_command = system_command
+    def execute_command(self):
+        os.system(self.system_command)
+
 if __name__ == "__main__":
     main()
 
 
-# from subprocess import call
-# call(["ls", "-l"])
 
 # osascript -e "set Volume 0"
 
 # osascript -e 'set ovol to output volume of (get volume settings)'
-
+# osascript -e "set volume input volume 100"
