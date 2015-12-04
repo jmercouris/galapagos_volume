@@ -68,20 +68,25 @@ def draw_bars():
     for index, device in enumerate(audio_devices):
         draw_bar(default_padding, (bar_height * index) + default_padding, bar_height, device)
 
-def draw_bar(x, y, bar_height, device):
-    device.set_volume(29)
-    box = curses.newwin(bar_height, 50, y, x)
+def draw_bar(x, y, height, device):
+    # Retrieve Important information
+    volume = device.get_volume()
+    name = device.name
+    # Global
+    global dimensions
+    global default_padding
+    width = int(float(volume)/100 * float(dimensions[1] - (default_padding * 2)))
+    box = curses.newwin(height, width, y, x)
     box.bkgd(' ', curses.color_pair(1))
     box.immedok(True)
     box.box()
-    box.addstr("{} Volume:{}".format(device.name, device.get_volume()))
+    box.addstr("{} Volume:{}".format(name, volume))
 
 class AudioDevice:
     def __init__(self, name, set_volume_command, get_volume_command):
         self.name = name
         self.set_volume_command = set_volume_command
         self.get_volume_command = get_volume_command
-
     def set_volume(self, volume):
         local_command = self.set_volume_command
         local_command[2] = self.set_volume_command[2].format(volume)
@@ -90,11 +95,21 @@ class AudioDevice:
     def get_volume(self):
         process = subprocess.Popen(self.get_volume_command, stdout = subprocess.PIPE)
         out, err = process.communicate('')
-        return out
+        return int(out)
 
 if __name__ == "__main__":
     main()
 
-# osascript -e "set Volume 0"
-# osascript -e 'set ovol to output volume of (get volume settings)'
-# osascript -e "set volume input volume 100"
+# Original Source: https://coderwall.com/p/22p0ja/set-get-osx-volume-mute-from-the-command-line
+# Get volume
+# # Echos a number from 0 to 100
+# osascript -e 'output volume of (get volume settings)'
+# Set volume
+# # Where 50 is a number from 0 to 100
+# osascript -e 'set volume output volume 50'
+# Get mute state
+# # Echos a string of 'true' or 'false'
+# osascript -e 'output muted of (get volume settings)'
+# Set mute state
+# # Where 'true' can be 'true' or 'false'
+# osascript -e 'set volume output muted true'
