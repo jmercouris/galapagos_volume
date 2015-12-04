@@ -30,13 +30,11 @@ class VolumeModel:
     def __init__(self):
         # List of audio devices
         audio_devices = self.audio_devices = []
-        
         # AudioDevice Output
         get_volume_command = ['osascript', '-e', 'output volume of (get volume settings)']
         set_volume_command = ['osascript', '-e', 'set volume output volume {}']
         device = AudioDevice("Output", set_volume_command, get_volume_command)
         audio_devices.append(device)
-        
         # AudioDevice Input
         get_volume_command = ['osascript', '-e', 'input volume of (get volume settings)']
         set_volume_command = ['osascript', '-e', 'set volume input volume {}']
@@ -44,14 +42,6 @@ class VolumeModel:
         audio_devices.append(device)
     def get_audio_devices(self):
         return self.audio_devices
-
-# Custom Button
-class VolumeButton(urwid.Button):
-    def keypress(self, size, key):
-        if key == "q":
-            pass
-        else:
-            return urwid.Button.keypress(self, size, key)
 
 # Class VolumeView, handles drawing and input
 class VolumeView(urwid.WidgetWrap):
@@ -81,12 +71,17 @@ class VolumeView(urwid.WidgetWrap):
         w = urwid.BarGraph(['bg background','bg 1','bg 2'], satt=satt)
         return w
     def button(self, t, fn):
-        w = VolumeButton(t, fn)
+        w = urwid.Button(t, fn)
         w = urwid.AttrWrap(w, 'button normal', 'button select')
         return w
-    # Exit Program Onclick
+    # Exit Program
     def exit_program(self, w):
         raise urwid.ExitMainLoop()
+    # Change Volume
+    def delta_volume(self, device, amount):
+        current_volume = device.get_volume()
+        device.set_volume(10)
+        self.update_graph(True)
     # Update Graph View
     def update_graph(self, force_update=False):
         l = []
@@ -101,13 +96,16 @@ class VolumeView(urwid.WidgetWrap):
     # Controls on the right hand side
     def graph_controls(self):
         l = [
-            urwid.Divider(),
-            urwid.Text("Device",align="center"),
-            urwid.Divider(),
-            self.button("Input", self.exit_program ),
-            self.button("Output", self.exit_program ),
-            self.button("Quit", self.exit_program ),
-            ]
+            urwid.Text("Device Select",align="left"),
+            urwid.Divider(),]
+        
+        for device in self.audio_devices:
+            l.append(self.button("{}  Volume:+".format(device.name), self.delta_volume(device, 5)))
+            l.append(self.button("{}  Volume:-".format(device.name), self.delta_volume(device, -5)))
+            l.append(urwid.Divider())
+            
+        l.append(self.button("Quit", self.exit_program ))
+            
         w = urwid.ListBox(urwid.SimpleListWalker(l))
         return w
     # Configuration of the Main Window
