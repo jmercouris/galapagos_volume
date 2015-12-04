@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # Imports
-import curses 
+import curses
+from curses import wrapper
 import curses.ascii
 import os
 import subprocess
@@ -8,15 +9,12 @@ import subprocess
 # Global Variables
 screen = None
 dimensions = None
-# Padding between bars
 default_padding = 5
-# Getch escape representation
 escape_character = 27
-# List of audio devices
 audio_devices = []
 
 # Main Function
-def main():
+def main(stdscr):
     global screen
     global dimensions
     global audio_devices
@@ -43,7 +41,20 @@ def main():
     set_volume_command = ['osascript', '-e', 'set volume input volume {}']
     device = AudioDevice("Input", set_volume_command, get_volume_command)
     audio_devices.append(device)
-
+    
+    # Initialize Default Bar State
+    bar_height = (dimensions[0] - default_padding * 2) / len(audio_devices)
+    for index, device in enumerate(audio_devices):
+        height = bar_height
+        width = int(float(device.get_volume())/100 * float(dimensions[1] - (default_padding * 2)))
+        x = default_padding
+        y = index * bar_height + default_padding
+        
+        device.bar = curses.newwin(height, width, y, x)
+        device.bar.bkgd(' ', curses.color_pair(1))
+        device.bar.immedok(True)
+        device.bar.box()
+    
     # Main Input Loop
     user_input = ''
     # Break if user enters 'esc' or 'q'
@@ -63,12 +74,10 @@ def draw_bars():
     global dimensions
     global default_padding
 
-    bar_height = (dimensions[0] - default_padding * 2) / len(audio_devices)
+    for device in audio_devices:
+        draw_bar(device)
 
-    for index, device in enumerate(audio_devices):
-        draw_bar(default_padding, (bar_height * index) + default_padding, bar_height, device)
-
-def draw_bar(x, y, height, device):
+def draw_bar(device):
     # Retrieve Important information
     volume = device.get_volume()
     name = device.name
@@ -76,11 +85,8 @@ def draw_bar(x, y, height, device):
     global dimensions
     global default_padding
     width = int(float(volume)/100 * float(dimensions[1] - (default_padding * 2)))
-    box = curses.newwin(height, width, y, x)
-    box.bkgd(' ', curses.color_pair(1))
-    box.immedok(True)
-    box.box()
-    box.addstr("{} Volume:{}".format(name, volume))
+    device.bar.resize(10, width)
+    device.bar.addstr("{} Volume:{}".format(name, volume))
 
 class AudioDevice:
     def __init__(self, name, set_volume_command, get_volume_command):
@@ -98,7 +104,7 @@ class AudioDevice:
         return int(out)
 
 if __name__ == "__main__":
-    main()
+    wrapper(main)
 
 # Original Source: https://coderwall.com/p/22p0ja/set-get-osx-volume-mute-from-the-command-line
 # Get volume
