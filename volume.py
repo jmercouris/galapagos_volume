@@ -33,7 +33,9 @@ def main():
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
     # AudioDevice List Initialization
-    device = AudioDevice("Output", "osascript -e 'set volume output volume 50' &> /dev/null")
+    get_volume_command = ['osascript', '-e', 'output volume of (get volume settings)']
+    set_volume_command = ['osascript', '-e', 'set volume output volume 50']
+    device = AudioDevice("Output", set_volume_command, get_volume_command)
     audio_devices.append(device)
     audio_devices.append(device)
     audio_devices.append(device)
@@ -72,12 +74,13 @@ def draw_bar(x, y, bar_height, device):
     box.addstr("{} Volume:{}".format(device.name, device.volume))
 
 class AudioDevice:
-    def __init__(self, name, system_command):
+    def __init__(self, name, set_volume_command, get_volume_command):
         self.name = name
-        self.system_command = system_command
+        self.set_volume_command = set_volume_command
+        self.get_volume_command = get_volume_command
         self.volume = 0
     def execute_command(self):
-        os.system(self.system_command)
+        subprocess.Popen(self.system_command, stdout = subprocess.PIPE)
 
 if __name__ == "__main__":
     main()
