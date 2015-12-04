@@ -23,14 +23,14 @@ def main():
     dimensions = screen.getmaxyx()
 
     curses.start_color()
-    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_WHITE)
+    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
     # Main Input Loop
     user_input = ''
     # Break if user enters 'esc' or 'q'
     while ((user_input != escape_character) and (user_input != ord('q'))):
         user_input = screen.getch()
-        draw_bars()
+        draw_bar()
         screen.refresh()
     
     # Break out of main loop, end program
@@ -45,6 +45,15 @@ def draw_bars():
     box.immedok(True)
     box.box()
     box.addstr("Bar")
+
+def draw_bar():
+    box = curses.newwin(dimensions[0]-10, dimensions[1]-10, 10, 10)
+    box.addstr("Volume")
+    box.bkgd(' ', curses.color_pair(1))
+    box.immedok(True)
+    box.box()
+    box.addstr("Bar")
+
 
 
 if __name__ == "__main__":
