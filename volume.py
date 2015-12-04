@@ -52,10 +52,67 @@ class VolumeView(urwid.WidgetWrap):
     A class responsible for providing the application's interface and
     volume display.
     """
+    
+    palette = [
+        ('body',         'black',      'light gray', 'standout'),
+        ('header',       'white',      'dark red',   'bold'),
+        ('screen edge',  'light blue', 'dark cyan'),
+        ('main shadow',  'dark gray',  'black'),
+        ('line',         'black',      'light gray', 'standout'),
+        ('bg background','light gray', 'black'),
+        ('bg 1',         'black',      'dark blue', 'standout'),
+        ('bg 1 smooth',  'dark blue',  'black'),
+        ('bg 2',         'black',      'dark cyan', 'standout'),
+        ('bg 2 smooth',  'dark cyan',  'black'),
+        ('button normal','light gray', 'dark blue', 'standout'),
+        ('button select','white',      'dark green'),
+        ('line',         'black',      'light gray', 'standout'),
+        ('pg normal',    'white',      'black', 'standout'),
+        ('pg complete',  'white',      'dark magenta'),
+        ('pg smooth',     'dark magenta','black')
+        ]
+
     def __init__(self, controller):
         self.controller = controller
         urwid.WidgetWrap.__init__(self, self.main_window())
+        
+    def bar_graph(self, smooth=False):
+        satt = None
+        if smooth:
+            satt = {(1,0): 'bg 1 smooth', (2,0): 'bg 2 smooth'}
+        w = urwid.BarGraph(['bg background','bg 1','bg 2'], satt=satt)
+        return w
 
+    def button(self, t, fn):
+        w = urwid.Button(t, fn)
+        w = urwid.AttrWrap(w, 'button normal', 'button select')
+        return w
+
+    def exit_program(self, w):
+        raise urwid.ExitMainLoop()
+
+    def graph_controls(self):
+        l = [urwid.Text("Mode",align="center"),
+            ] + [
+            urwid.Divider(),
+            urwid.Text("Animation",align="center"),
+            urwid.Divider(),
+            self.button("Quit", self.exit_program ),
+            ]
+        w = urwid.ListBox(urwid.SimpleListWalker(l))
+        return w
+        
+    def main_window(self):
+        self.graph = self.bar_graph()
+        self.graph_wrap = urwid.WidgetWrap( self.graph )
+        vline = urwid.AttrWrap( urwid.SolidFill(u'\u2502'), 'line')
+        c = self.graph_controls()
+        w = urwid.Columns([('weight',2,self.graph_wrap),
+            ('fixed',1,vline), c],
+            dividechars=1, focus_column=2)
+        w = urwid.Padding(w,('fixed left',1),('fixed right',0))
+        return w
+        
     def main(self):
         pass
 
@@ -67,7 +124,7 @@ class VolumeController:
     def __init__(self):
         self.model = VolumeModel()
         self.view = VolumeView( self )
-
+        
     def main(self):
         self.loop = urwid.MainLoop(self.view, self.view.palette)
         self.loop.run()
