@@ -47,14 +47,12 @@ def draw_bars():
     box.addstr("Bar")
 
 def draw_bar():
-    box = curses.newwin(dimensions[0]-10, dimensions[1]-10, 10, 10)
+    box = curses.newwin(5, 5, 10, 5)
     box.addstr("Volume")
     box.bkgd(' ', curses.color_pair(1))
     box.immedok(True)
     box.box()
     box.addstr("Bar")
-
-
 
 if __name__ == "__main__":
     main()
