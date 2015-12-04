@@ -36,7 +36,7 @@ class VolumeModel:
         set_volume_command = ['osascript', '-e', 'set volume output volume {}']
         device = AudioDevice("Output", set_volume_command, get_volume_command)
         audio_devices.append(device)
-        device.set_volume(85)
+        device.set_volume(70)
         
         # AudioDevice Input
         get_volume_command = ['osascript', '-e', 'input volume of (get volume settings)']
@@ -91,12 +91,24 @@ class VolumeView(urwid.WidgetWrap):
     def exit_program(self, w):
         raise urwid.ExitMainLoop()
 
+    def update_graph(self, force_update=False):
+        l = []
+        for n in range(10):
+            value = n
+            # toggle between two bar types
+            if n & 1:
+                l.append([0,value])
+            else:
+                l.append([value,0])
+        self.graph.set_data(l,10)
+
     def graph_controls(self):
         l = [urwid.Text("Mode",align="center"),
             ] + [
             urwid.Divider(),
             urwid.Text("Animation",align="center"),
             urwid.Divider(),
+            self.button("Quit", self.exit_program ),
             self.button("Quit", self.exit_program ),
             ]
         w = urwid.ListBox(urwid.SimpleListWalker(l))
@@ -124,6 +136,7 @@ class VolumeController:
     def __init__(self):
         self.model = VolumeModel()
         self.view = VolumeView( self )
+        self.view.update_graph(True)
         
     def main(self):
         self.loop = urwid.MainLoop(self.view, self.view.palette)
