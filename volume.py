@@ -36,7 +36,6 @@ class VolumeModel:
         set_volume_command = ['osascript', '-e', 'set volume output volume {}']
         device = AudioDevice("Output", set_volume_command, get_volume_command)
         audio_devices.append(device)
-        device.set_volume(60)
         
         # AudioDevice Input
         get_volume_command = ['osascript', '-e', 'input volume of (get volume settings)']
@@ -48,11 +47,6 @@ class VolumeModel:
 
 # Custom Button
 class VolumeButton(urwid.Button):
-    def __init__(self, caption, callback):
-        super(VolumeButton, self).__init__("")
-        urwid.connect_signal(self, 'click', callback)
-        self._w = urwid.AttrMap(urwid.SelectableIcon(
-            [u'  \N{BULLET} ', caption], 2), None, 'selected')
     def keypress(self, size, key):
         if key == "q":
             pass
