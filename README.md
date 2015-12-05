@@ -47,7 +47,8 @@ http://www.pyinstaller.org
 + `rm -rf dist`
 + `pyinstaller -F volume.py`
 
-## Shell Commands to Change the Volume (This program executes/wraps these commands)
+## Shell Commands to Change the Volume
+### (This program executes/wraps these commands)
 
 Src: https://coderwall.com/p/22p0ja/set-get-osx-volume-mute-from-the-command-line
 
