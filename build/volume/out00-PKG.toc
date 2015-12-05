@@ -1,0 +1,12 @@
+('/Users/jmercouris/Projects/Volume/build/volume/out00-PKG.pkg',
+ {'BINARY': 1,
+  'DATA': 1,
+  'EXECUTABLE': 1,
+  'EXTENSION': 1,
+  'PYMODULE': 1,
+  'PYSOURCE': 1,
+  'PYZ': 0},
+ [('out00-PYZ.pyz', '/Users/jmercouris/Projects/Volume/build/volume/out00-PYZ.pyz', 'PYZ'), ('_struct', '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload/_struct.so', 'EXTENSION'), ('zlib', '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload/zlib.so', 'EXTENSION'), ('struct', '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/struct.pyc', 'PYMODULE'), ('pyimod01_os_path', '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/PyInstaller-3.0-py2.7.egg/PyInstaller/loader/pyimod01_os_path.pyc', 'PYMODULE'), ('pyimod02_archive', '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/PyInstaller-3.0-py2.7.egg/PyInstaller/loader/pyimod02_archive.pyc', 'PYMODULE'), ('pyimod03_importers', '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/PyInstaller-3.0-py2.7.egg/PyInstaller/loader/pyimod03_importers.pyc', 'PYMODULE'), ('pyiboot01_bootstrap', '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/PyInstaller-3.0-py2.7.egg/PyInstaller/loader/pyiboot01_bootstrap.py', 'PYSOURCE'), ('volume', '/Users/jmercouris/Projects/Volume/volume.py', 'PYSOURCE')],
+ True,
+ None,
+ False)
