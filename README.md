@@ -38,13 +38,14 @@ Named galapagos after the voyage of Charles Darwin. Named after Darwin """Darwin
 https://en.wikipedia.org/wiki/Darwin_(operating_system)
 
 ## Why did you make Galapagos?
-I made Galapagos because I like doing this from the command line, sometimes I am just SSH'd into my machine, or I
+I made Galapagos because I like doing things from the command line, sometimes I am just SSH'd into my machine, or I
 have a full screen terminal open. I don't like going away from it and using the mouse.
 
 ## How to create new distributions with Pyinstaller?
 http://www.pyinstaller.org
 
-pyinstaller -F program.py
++ `rm -rf dist`
++ `pyinstaller -F volume.py`
 
 ## Shell Commands to Change the Volume (This program executes/wraps these commands)
 
