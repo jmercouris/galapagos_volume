@@ -23,6 +23,10 @@ python volume.py as you would any other program.
 + `volume -d input`
   + show the input volume
 
+## Demonstration
+![alt text](img/output.gif "Gif demonstration")
+
+
 ## What is Galapagos?
 Galapagos Volume is a wrapper utility for setting the volume in OSX.
 It works by calling applescript commands in a subprocess to set the volume. There are a couple
