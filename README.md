@@ -12,15 +12,15 @@ pyinstaller -F program.py
 
 Src: https://coderwall.com/p/22p0ja/set-get-osx-volume-mute-from-the-command-line
 
-*Get volume
-*Echos a number from 0 to 100
-**`osascript -e 'output volume of (get volume settings)'`
-*Set volume
-*Where 50 is a number from 0 to 100
-**`osascript -e 'set volume output volume 50'`
-*Get mute state
-*Echos a string of 'true' or 'false'
-**`osascript -e 'output muted of (get volume settings)'`
-*Set mute state
-*Where 'true' can be 'true' or 'false'
-**`osascript -e 'set volume output muted true'`
++Get volume
++Echos a number from 0 to 100
++`osascript -e 'output volume of (get volume settings)'`
++Set volume
++Where 50 is a number from 0 to 100
++`osascript -e 'set volume output volume 50'`
++Get mute state
++Echos a string of 'true' or 'false'
++`osascript -e 'output muted of (get volume settings)'`
++Set mute state
++Where 'true' can be 'true' or 'false'
++`osascript -e 'set volume output muted true'`
