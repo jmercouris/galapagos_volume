@@ -1,8 +1,19 @@
 #!/usr/bin/env python
 # Imports
 import os
-import subprocess
-import urwid
+import subprocess  # Python execute sub process, in this case to send osascript commands
+import urwid       # Replacement for curses, used in the Terminal GUI
+import argparse    # Easily parse command line arguments
+
+description_string = """Galapagos Volume is a wrapper utility for setting the volume in OSX.
+It works by calling applescript commands in a subprocess to set the volume. There are a couple
+of ways to use Galapagos Volume, the first is by just running the program without any parameters
+this will produce a GUI that allows you to increase or decrease the volume for input and output.
+The second is with the flags -d -device, and -v -volume. If you specify a "-d output" or a "-d input" 
+the system will return the volume for that device. For example, "volume -d output" will return the output volume. 
+If you specify a device and a volume, the system will SET the volume for that device. Therefore a sample
+command to set the output would be "volume -d output -v 85", this would set the output volume to 85."""
+
 # Represents an OSX audio device, e.g. input, output
 class AudioDevice:
     """
@@ -14,10 +25,12 @@ class AudioDevice:
         self.get_volume_command = get_volume_command
         self.volume = self.get_volume()
     def set_volume(self, volume):
+        # Constrain Volume to Valid Range
         if (volume > 100):
             volume = 100
         if (volume < 0):
             volume = 0
+        # Copy Command arguments list into local version for modification
         local_command = self.set_volume_command[:]
         local_command[2] = self.set_volume_command[2].format(volume)
         process = subprocess.Popen(local_command, stdout = subprocess.PIPE)
@@ -26,6 +39,7 @@ class AudioDevice:
     def get_volume(self):
         process = subprocess.Popen(self.get_volume_command, stdout = subprocess.PIPE)
         out, err = process.communicate()
+        # Set Local volume to reflect system reported volume
         self.volume = int(out)
         return self.volume
 
@@ -56,6 +70,7 @@ class VolumeView(urwid.WidgetWrap):
     A class responsible for providing the application's interface and
     volume display.
     """
+    # Colors used for rendering
     palette = [
         ('bg background','white', 'white'),
         ('bg 1',         'black',      'black', 'standout'),
@@ -127,7 +142,7 @@ class VolumeView(urwid.WidgetWrap):
         l.append(self.button("Quit", self.exit_program ))
         w = urwid.ListBox(urwid.SimpleListWalker(l))
         return w
-    # Configuration of the Main Window
+    # Configuration of the Main Window, combines controls and bar display
     def main_window(self):
         self.graph = self.bar_graph()
         self.graph_wrap = urwid.WidgetWrap( self.graph )
@@ -159,13 +174,49 @@ class VolumeController:
 
 # Initialize the VolumeController
 def main():
-    VolumeController().main()
+    # Command line Argument Parameters
+    parser = argparse.ArgumentParser(description=description_string)
+    parser.add_argument('-d','--device', type=str, help='Break Interval (minutes)',required=False)
+    parser.add_argument('-v','--volume', type=int, help='Volume Level',required=False)
+    args = parser.parse_args()
+
+    # User specified a device, but no volume setting, they want info
+    if args.device is not None and args.volume is None:
+        device = args.device
+        if "output" == device:
+            print VolumeModel().get_audio_devices()[0].get_volume()
+        if "input" == device:
+            print VolumeModel().get_audio_devices()[1].get_volume()
+
+    # Volume specified without a device specified, assume they want to change output
+    if args.volume is not None and args.device is None:
+        volume = args.volume
+        device = VolumeModel().get_audio_devices()[0]
+        device.set_volume(volume)
+        print device.get_volume()
+
+    # User specified volume and device
+    if args.volume is not None and args.device is not None:
+        device = args.device
+        volume = args.volume
+        # Assign device to correct device object
+        if "output" == device:
+            device = VolumeModel().get_audio_devices()[0]
+        if "input" == device:
+            device = VolumeModel().get_audio_devices()[1]
+        device.set_volume(volume)
+        print device.get_volume()
+
+    # Execute GUI if no command line arguments passed
+    if args.device is None and args.volume is None:
+        VolumeController().main()
+
 # If Called from the command line
 if __name__ == "__main__":
     main()
 
 ################################################################################
-# Shell Commands to Change the Volume (This program executes these commands)
+# Shell Commands to Change the Volume (This program executes/wraps these commands)
 ################################################################################
 # Src: https://coderwall.com/p/22p0ja/set-get-osx-volume-mute-from-the-command-line
 # Get volume
