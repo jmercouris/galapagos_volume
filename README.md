@@ -11,16 +11,16 @@ You can choose to download this entire repository, install URWID (http://urwid.o
 python volume.py as you would any other program.
 
 ## Usage
-+ volume
++ `volume`
   + When started from the command line with no arguments, volume will produce a terminal GUI
 
-+ volume -v 80
++ `volume -v 80`
   + set the volume to 80/100
 
-+ volume -v 65 -d input
++ `volume -v 65 -d input`
   + set the input volume to 65/100
 
-+ volume -d input
++ `volume -d input`
   + show the input volume
 
 ## What is Galapagos?
