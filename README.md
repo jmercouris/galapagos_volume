@@ -3,7 +3,7 @@ Program used to control the volume in a Curses like interface for OSX.
 
 ## Getting Galapagos
 ### Easy Install
-Download from [GALAPAGOS DOWNLOAD](dist/volume). Then, Simply execute volume.
+Download from [GALAPAGOS DOWNLOAD](dist/volume). You may need to run `chmod +x volume`. Then, Simply execute volume.
 You can add it to your path if you like for easier execution. Or add it where you keep your other programs
 in your path. 
 ### Difficult Install with the possibility to change code
