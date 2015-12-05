@@ -1,4 +1,0 @@
-('/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/urwid-1.3.1-py2.7-macosx-10.11-x86_64.egg',
- None,
- set(['*.py', '*.pyc', '*.pyd', '*.pyo', '*.so', 'EGG-INFO']),
- [])
