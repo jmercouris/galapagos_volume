@@ -14,15 +14,20 @@ class AudioDevice:
         self.get_volume_command = get_volume_command
         self.volume = self.get_volume()
     def set_volume(self, volume):
+        if (volume > 100):
+            volume = 100
+        if (volume < 0):
+            volume = 0
         local_command = self.set_volume_command[:]
         local_command[2] = self.set_volume_command[2].format(volume)
         process = subprocess.Popen(local_command, stdout = subprocess.PIPE)
         out, err = process.communicate()
+        self.volume = volume
     def get_volume(self):
         process = subprocess.Popen(self.get_volume_command, stdout = subprocess.PIPE)
         out, err = process.communicate()
-        volume = int(out)
-        return volume
+        self.volume = int(out)
+        return self.volume
 
 # Represents the Data in the program
 class VolumeModel:
@@ -87,12 +92,15 @@ class VolumeView(urwid.WidgetWrap):
     def delta_output_down(self, w):
         device = self.audio_devices[0]
         device.set_volume(device.get_volume() - 5)
+        self.update_graph()
     def delta_input_up(self, w):
         device = self.audio_devices[1]
         device.set_volume(device.get_volume() + 5)
+        self.update_graph()
     def delta_input_down(self, w):
         device = self.audio_devices[1]
         device.set_volume(device.get_volume() - 5)
+        self.update_graph()
     # Update Graph View
     def update_graph(self, force_update=True):
         l = []
@@ -107,11 +115,12 @@ class VolumeView(urwid.WidgetWrap):
         return True
     # Controls on the right hand side
     def graph_controls(self):
-        l = [
-            urwid.Text("Device Select",align="left"),
-            urwid.Divider(),]
+        l = []
+        l.append(urwid.Text("Device Select",align="left"))
+        l.append(urwid.Divider())
         l.append(self.button("{} +".format('Output'), self.delta_output_up ))
         l.append(self.button("{} -".format('Output'), self.delta_output_down ))
+        l.append(urwid.Divider())
         l.append(self.button("{}  +".format('Input'), self.delta_input_up ))
         l.append(self.button("{}  -".format('Input'), self.delta_input_down ))
         l.append(urwid.Divider())
