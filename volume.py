@@ -83,6 +83,7 @@ class VolumeView(urwid.WidgetWrap):
     def delta_output_up(self, w):
         device = self.audio_devices[0]
         device.set_volume(device.get_volume() + 5)
+        self.update_graph()
     def delta_output_down(self, w):
         device = self.audio_devices[0]
         device.set_volume(device.get_volume() - 5)
@@ -92,8 +93,6 @@ class VolumeView(urwid.WidgetWrap):
     def delta_input_down(self, w):
         device = self.audio_devices[1]
         device.set_volume(device.get_volume() - 5)
-        self.update_graph(True)
-
 
     # Update Graph View
     def update_graph(self, force_update=True):
@@ -106,6 +105,7 @@ class VolumeView(urwid.WidgetWrap):
             else:
                 l.append([volume,0])
         self.graph.set_data(l,100)
+        return True
     # Controls on the right hand side
     def graph_controls(self):
         l = [
