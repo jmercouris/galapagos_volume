@@ -93,7 +93,6 @@ class VolumeView(urwid.WidgetWrap):
     def delta_input_down(self, w):
         device = self.audio_devices[1]
         device.set_volume(device.get_volume() - 5)
-
     # Update Graph View
     def update_graph(self, force_update=True):
         l = []
@@ -111,13 +110,12 @@ class VolumeView(urwid.WidgetWrap):
         l = [
             urwid.Text("Device Select",align="left"),
             urwid.Divider(),]
-        l.append(self.button("{}  Volume:+".format('Output'), self.delta_output_up ))
-        l.append(self.button("{}  Volume:-".format('Output'), self.delta_output_down ))
-        l.append(self.button("{}  Volume:+".format('Input'), self.delta_input_up ))
-        l.append(self.button("{}  Volume:-".format('Input'), self.delta_input_down ))
+        l.append(self.button("{} +".format('Output'), self.delta_output_up ))
+        l.append(self.button("{} -".format('Output'), self.delta_output_down ))
+        l.append(self.button("{}  +".format('Input'), self.delta_input_up ))
+        l.append(self.button("{}  -".format('Input'), self.delta_input_down ))
         l.append(urwid.Divider())
         l.append(self.button("Quit", self.exit_program ))
-            
         w = urwid.ListBox(urwid.SimpleListWalker(l))
         return w
     # Configuration of the Main Window
@@ -126,10 +124,10 @@ class VolumeView(urwid.WidgetWrap):
         self.graph_wrap = urwid.WidgetWrap( self.graph )
         vline = urwid.AttrWrap( urwid.SolidFill(u'\u2502'), 'line')
         c = self.graph_controls()
-        w = urwid.Columns([('weight',2,self.graph_wrap),
+        w = urwid.Columns([('weight',1,self.graph_wrap),
             ('fixed',1,vline), c],
             dividechars=1, focus_column=2)
-        w = urwid.Padding(w,('fixed left',1),('fixed right',0))
+        w = urwid.Padding(w,('fixed left',1),('fixed right',1))
         return w
 
 # Class VolumeController, serves as a view Controller
