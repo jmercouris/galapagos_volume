@@ -14,13 +14,13 @@ class AudioDevice:
         self.get_volume_command = get_volume_command
         self.volume = self.get_volume()
     def set_volume(self, volume):
-        local_command = self.set_volume_command
-        local_command = self.set_volume_command[2].format(volume)
-        process = subprocess.Popen(self.set_volume_command, stdout = subprocess.PIPE)
-        out, err = process.communicate('')
+        local_command = self.set_volume_command[:]
+        local_command[2] = self.set_volume_command[2].format(volume)
+        process = subprocess.Popen(local_command, stdout = subprocess.PIPE)
+        out, err = process.communicate()
     def get_volume(self):
         process = subprocess.Popen(self.get_volume_command, stdout = subprocess.PIPE)
-        out, err = process.communicate('')
+        out, err = process.communicate()
         volume = int(out)
         return volume
 
@@ -80,22 +80,23 @@ class VolumeView(urwid.WidgetWrap):
     def exit_program(self, w):
         raise urwid.ExitMainLoop()
     # Change Volume
-    def delta_input_up(self, w):
-        self.audio_devices[0].set_volume(self.audio_devices[0].volume + 5)
-        self.update_graph(True)
-    def delta_input_down(self, w):
-        self.audio_devices[0].set_volume(self.audio_devices[0].volume - 5)
-        self.update_graph(True)
     def delta_output_up(self, w):
-        self.audio_devices[0].set_volume(self.audio_devices[1].volume + 5)
-        self.update_graph(True)
+        device = self.audio_devices[0]
+        device.set_volume(device.get_volume() + 5)
     def delta_output_down(self, w):
-        self.audio_devices[0].set_volume(self.audio_devices[1].volume - 5)
+        device = self.audio_devices[0]
+        device.set_volume(device.get_volume() - 5)
+    def delta_input_up(self, w):
+        device = self.audio_devices[1]
+        device.set_volume(device.get_volume() + 5)
+    def delta_input_down(self, w):
+        device = self.audio_devices[1]
+        device.set_volume(device.get_volume() - 5)
         self.update_graph(True)
 
 
     # Update Graph View
-    def update_graph(self, force_update=False):
+    def update_graph(self, force_update=True):
         l = []
         for index, device in enumerate(self.audio_devices):
             volume = device.volume
@@ -110,11 +111,10 @@ class VolumeView(urwid.WidgetWrap):
         l = [
             urwid.Text("Device Select",align="left"),
             urwid.Divider(),]
-        
-        l.append(self.button("{}  Volume:+".format('Input'), self.delta_input_up ))
-        l.append(self.button("{}  Volume:-".format('Input'), self.delta_input_down ))
         l.append(self.button("{}  Volume:+".format('Output'), self.delta_output_up ))
         l.append(self.button("{}  Volume:-".format('Output'), self.delta_output_down ))
+        l.append(self.button("{}  Volume:+".format('Input'), self.delta_input_up ))
+        l.append(self.button("{}  Volume:-".format('Input'), self.delta_input_down ))
         l.append(urwid.Divider())
         l.append(self.button("Quit", self.exit_program ))
             
