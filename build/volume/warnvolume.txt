@@ -42,32 +42,22 @@ missing module named errno.ENOENT - imported by errno, gettext
 missing module named cStringIO.StringIO - imported by cStringIO, gettext, pprint, shlex, tempfile, pickle, encodings.uu_codec, quopri, encodings.quopri_codec
 missing module named _struct.__doc__ - imported by _struct, struct
 missing module named _struct._clearcache - imported by _struct, struct
-missing module named fcntl.I_PUSH - imported by fcntl, pty
-missing module named fcntl.ioctl - imported by fcntl, pty
-missing module named sgi - imported by pty
-missing module named select.select - imported by select, pty
-missing module named time.time - imported by time, threading
-missing module named time.sleep - imported by time, threading
-missing module named thread.allocate_lock - imported by thread, _strptime
-missing module named thread._local - imported by thread, threading
-missing module named thread.stack_size - imported by thread, threading
-missing module named thread.get_ident - imported by thread, collections
-missing module named datetime.date - imported by datetime, _strptime
 missing module named _functools.partial - imported by _functools, functools
 missing module named _functools.reduce - imported by _functools, functools
 missing module named operator.attrgetter - imported by operator, inspect, urwid.widget
 missing module named operator.itemgetter - imported by operator, collections, heapq
 missing module named operator.eq - imported by operator, collections
-missing module named collections.namedtuple - imported by collections, inspect, unittest.util, difflib, doctest
-missing module named cPickle.loads - imported by cPickle, collections
-missing module named cPickle.dumps - imported by cPickle, collections
-missing module named collections.deque - imported by collections, shlex, threading
-missing module named collections.OrderedDict - imported by collections, unittest.util
-missing module named _collections.deque - imported by _collections, collections
-missing module named _collections.defaultdict - imported by _collections, collections
+missing module named fcntl.I_PUSH - imported by fcntl, pty
+missing module named fcntl.ioctl - imported by fcntl, pty
+missing module named time.time - imported by time, threading
+missing module named time.sleep - imported by time, threading
+missing module named thread.allocate_lock - imported by thread, _strptime
+missing module named datetime.date - imported by datetime, _strptime
 missing module named _hashlib.pbkdf2_hmac - imported by _hashlib, hashlib
 missing module named threading.RLock - imported by threading, _threading_local
 missing module named threading.current_thread - imported by threading, _threading_local
+missing module named thread._local - imported by thread, threading
+missing module named thread.stack_size - imported by thread, threading
 missing module named _sha512 - imported by hashlib
 missing module named _sha256 - imported by hashlib
 missing module named _md5 - imported by hashlib
@@ -95,6 +85,16 @@ missing module named _io.StringIO - imported by _io, io
 missing module named _io.BufferedRWPair - imported by _io, io
 missing module named _io.TextIOWrapper - imported by _io, io
 missing module named _io.UnsupportedOperation - imported by _io, io
+missing module named cPickle.loads - imported by cPickle, collections
+missing module named cPickle.dumps - imported by cPickle, collections
+missing module named thread.get_ident - imported by thread, collections
+missing module named collections.deque - imported by collections, shlex, threading
+missing module named collections.OrderedDict - imported by collections, unittest.util
+missing module named collections.namedtuple - imported by collections, inspect, unittest.util, difflib, doctest
+missing module named _collections.deque - imported by _collections, collections
+missing module named _collections.defaultdict - imported by _collections, collections
+missing module named sgi - imported by pty
+missing module named select.select - imported by select, pty
 missing module named asyncio - imported by urwid.main_loop
 missing module named 'twisted.internet'.AlreadyCancelled - imported by 'twisted.internet', urwid.main_loop
 missing module named 'twisted.internet'.AlreadyCalled - imported by 'twisted.internet', urwid.main_loop
